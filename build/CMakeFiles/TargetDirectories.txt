@@ -1,0 +1,3 @@
+C:/Users/frann/OneDrive/Desktop/Lab ComputerVision/Mid Project/build/CMakeFiles/main.dir
+C:/Users/frann/OneDrive/Desktop/Lab ComputerVision/Mid Project/build/CMakeFiles/edit_cache.dir
+C:/Users/frann/OneDrive/Desktop/Lab ComputerVision/Mid Project/build/CMakeFiles/rebuild_cache.dir
