@@ -1,5 +1,5 @@
 #include "../include/PreProc.h"
-#include "../include/OpticalFlowFilter.h"
+#include "../include/SparseOpticalFlow.h"
 
 #include <iostream>
 #include <opencv2/highgui.hpp>
@@ -33,9 +33,9 @@ int main(int argc, char** argv)
 
     //black&white and blur (gaussian filter) every frame
 	preProcessFilter(frames);
-	
+	std::cout << "Pre Processed Frame" << std::endl;
     //return the rect with the bounding box of the area with the most motion
-    cv::Rect boundingBox = denseOpticalFlow(frames);
+    cv::Rect boundingBox = sparseOpticalFlow(frames);
 
     //draw bounding box on the first frame
     cv::rectangle(firstFrame, boundingBox, cv::Scalar(0, 0, 255), 2);   

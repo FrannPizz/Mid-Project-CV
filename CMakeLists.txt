@@ -12,6 +12,7 @@ add_executable(main
     src/main.cpp
     src/preProc.cpp
     src/OpticalFlowFilter.cpp
+    src/SparseOpticalFlow.cpp
 )
 
 target_link_libraries(main ${OpenCV_LIBS})
