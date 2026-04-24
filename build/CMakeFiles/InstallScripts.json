@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"C:/Users/frann/OneDrive/Desktop/Lab ComputerVision/Mid Project/build/cmake_install.cmake"
+		"C:/Develop/Mid-Project-CV/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

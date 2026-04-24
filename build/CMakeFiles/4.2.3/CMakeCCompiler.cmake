@@ -23,7 +23,6 @@ set(CMAKE_C_COMPILER_ARCHITECTURE_ID "x86_64")
 
 
 
-
 set(CMAKE_AR "C:/msys64/ucrt64/bin/ar.exe")
 set(CMAKE_C_COMPILER_AR "C:/msys64/ucrt64/bin/gcc-ar.exe")
 set(CMAKE_RANLIB "C:/msys64/ucrt64/bin/ranlib.exe")

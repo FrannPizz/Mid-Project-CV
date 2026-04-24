@@ -1,6 +1,6 @@
 CMakeFiles/main.dir/src/preProc.cpp.obj: \
- C:\Users\frann\OneDrive\Desktop\Lab\ ComputerVision\Mid\ Project\src\preProc.cpp \
- C:/Users/frann/OneDrive/Desktop/Lab\ ComputerVision/Mid\ Project/include/PreProc.h \
+ C:\Develop\Mid-Project-CV\src\preProc.cpp \
+ C:/Develop/Mid-Project-CV/include/PreProc.h \
  C:/msys64/ucrt64/include/opencv4/opencv2/highgui.hpp \
  C:/msys64/ucrt64/include/opencv4/opencv2/core.hpp \
  C:/msys64/ucrt64/include/opencv4/opencv2/core/cvdef.h \

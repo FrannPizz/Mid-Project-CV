@@ -8,9 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/frann/OneDrive/Desktop/Lab ComputerVision/Mid Project/src/OpticalFlowFilter.cpp" "CMakeFiles/main.dir/src/OpticalFlowFilter.cpp.obj" "gcc" "CMakeFiles/main.dir/src/OpticalFlowFilter.cpp.obj.d"
-  "C:/Users/frann/OneDrive/Desktop/Lab ComputerVision/Mid Project/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.obj" "gcc" "CMakeFiles/main.dir/src/main.cpp.obj.d"
-  "C:/Users/frann/OneDrive/Desktop/Lab ComputerVision/Mid Project/src/preProc.cpp" "CMakeFiles/main.dir/src/preProc.cpp.obj" "gcc" "CMakeFiles/main.dir/src/preProc.cpp.obj.d"
+  "C:/Develop/Mid-Project-CV/src/OpticalFlowFilter.cpp" "CMakeFiles/main.dir/src/OpticalFlowFilter.cpp.obj" "gcc" "CMakeFiles/main.dir/src/OpticalFlowFilter.cpp.obj.d"
+  "C:/Develop/Mid-Project-CV/src/SparseOpticalFlow.cpp" "CMakeFiles/main.dir/src/SparseOpticalFlow.cpp.obj" "gcc" "CMakeFiles/main.dir/src/SparseOpticalFlow.cpp.obj.d"
+  "C:/Develop/Mid-Project-CV/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.obj" "gcc" "CMakeFiles/main.dir/src/main.cpp.obj.d"
+  "C:/Develop/Mid-Project-CV/src/preProc.cpp" "CMakeFiles/main.dir/src/preProc.cpp.obj" "gcc" "CMakeFiles/main.dir/src/preProc.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
