@@ -7,6 +7,7 @@
 #ifndef OPTICALFLOW_H_INCLUDED
 #define OPTICALFLOW_H_INCLUDED
 
-cv::Rect denseOpticalFlow(std::vector<cv::Mat>& imageVector); 
+
+cv::Mat createMaskFarneback(std::vector<cv::Mat>& frames);
 
 #endif

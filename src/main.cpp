@@ -1,48 +1,68 @@
 #include "../include/PreProc.h"
+#include "../include/OpticalFlowFilter.h"
 #include "../include/SparseOpticalFlow.h"
+#include "../include/FrameStats.h"
 
-#include <iostream>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
+int main() {
 
-int main(int argc, char** argv)
-{
-
-    std::cout << "Avvio"<< std::endl;
-
-    //check argv
-    if (argc < 2) {
-        std::cout << "Errore: Inserisci il percorso" << std::endl;
-        cv::waitKey(0);
-        return -1;
-    }
+    std::cout << "Avvio" << std::endl;
     
-    //save frame in vector as string
-	std::vector<std::string> pathFrames;
-	cv::glob(std::string(argv[1]) + "/*", pathFrames, false);
-    std::sort(pathFrames.begin(), pathFrames.end());
-	
-    //convert frames string in cv::Mat
-    std::vector<cv::Mat> frames;
+    std::vector<std::string> pathFrames = {
+        "../data/bird/",
+        "../data/car/",
+        "../data/frog/",
+        "../data/sheep/",
+        "../data/squirrel/"
+    };
+
+    std::vector<std::string> pathLabels = {
+        "../labels/bird/",
+        "../labels/car/",
+        "../labels/frog/",
+        "../labels/sheep/",
+        "../labels/squirrel/"
+    };
+
+    std::vector<float> mIoUValues;
+
     for (int i = 0; i < pathFrames.size(); i++){
-        frames.push_back(cv::imread(pathFrames[i]));
+        
+        std::vector<std::string> imageFiles;
+        cv::glob(pathFrames[i] + "/*", imageFiles);
+
+        std::vector<cv::Mat> frames;
+        for (int i = 0; i < imageFiles.size(); i++) {
+            frames.push_back(cv::imread(imageFiles[i]));
+        }
+
+        cv::Mat firstFrame = frames[0];
+
+
+        //CALCULATEGREEN RECT PART
+        std::string labelPath = pathLabels[i] + "0000.txt";
+
+        cv::Rect groundTruthBox = readGroundTruthBox(labelPath);
+
+        // CALCULATE RED RECT PART
+        preProcessFilter(frames);
+
+        cv::Mat maskFarneback = createMaskFarneback(frames);
+
+        cv::Rect boundingBox = sparseOpticalFlow(frames, maskFarneback);
+
+        //PRINT GREEN RECT
+        cv::rectangle(firstFrame, groundTruthBox, cv::Scalar(0, 255, 0), 2);
+        //PRINT RED RECT
+        cv::rectangle(firstFrame, boundingBox, cv::Scalar(0, 0, 255), 2);
+
+
+        mIoUValues.push_back(detectmIoU(boundingBox, groundTruthBox));
+
+        cv::imshow("Bounding Box", firstFrame);
+        cv::waitKey(5000);
+
+        std::cout << "Done with " << pathFrames[i] << std::endl;
     }
-
-    //save the first frame colored for the bounding box 
-    cv::Mat firstFrame = frames[0];
-
-    //black&white and blur (gaussian filter) every frame
-	preProcessFilter(frames);
-	std::cout << "Pre Processed Frame" << std::endl;
-    //return the rect with the bounding box of the area with the most motion
-    cv::Rect boundingBox = sparseOpticalFlow(frames);
-
-    //draw bounding box on the first frame
-    cv::rectangle(firstFrame, boundingBox, cv::Scalar(0, 0, 255), 2);   
-
-    //show the first frame with the bounding box
-    cv::imshow("Bounding Box", firstFrame);
-    cv::waitKey(0);
-    
+    detectAccuracy(mIoUValues);
     return 0;
 }

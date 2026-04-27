@@ -4,8 +4,6 @@
 #ifndef PREPROC_H_INCLUDED
 #define PREPROC_H_INCLUDED
 
-void blackWhiteFilterVector(std::vector<cv::Mat>& imageVector); 
-void gaussianFilterVector(std::vector<cv::Mat>& imageVector); 
 void preProcessFilter(std::vector<cv::Mat>& imageVector);
 
 #endif

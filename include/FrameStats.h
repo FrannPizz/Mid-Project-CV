@@ -1,0 +1,14 @@
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <iostream>
+#include <fstream>
+
+#ifndef FRAMESTATS_H_INCLUDED
+#define FRAMESTATS_H_INCLUDED
+
+cv::Rect readGroundTruthBox(std::string& filePath);
+float detectmIoU(cv::Rect& boundingBox, cv::Rect& groundTruthBox);
+void detectAccuracy(std::vector<float>& mIoU);
+
+#endif

@@ -1,85 +1,74 @@
 #include "../include/OpticalFlowFilter.h"
 
-cv::Rect denseOpticalFlow(std::vector<cv::Mat>& imageVector){
+//creates a mask by computing dense optical flow between consecutive frames using farneback algorithm for help sparse optical flow
+cv::Mat createMaskFarneback(std::vector<cv::Mat>& frames) {
+    
+    //initialize the future mask 
+    cv::Mat nullMask = cv::Mat::zeros(frames[0].size(), CV_32F);
 
-    //total magnitude of the flow
-    cv::Mat totalMagnitude = cv::Mat::zeros(imageVector[0].size(), CV_32F);
-
-    for(int i = 0; i < imageVector.size() - 1; i++){
+    //loop through consecutive frame pairs to compute optical flow
+    for (int i = 0; i < frames.size() - 1; i++) {
         
-        //calcuate flow between two frames
+        //calculate exponential weight for this frame pair (more recent frames have higher weight)
+        float weight = std::exp(-i);
+
+        //compute dense optical flow using farneback algorithm
         cv::Mat flow;
-        cv::calcOpticalFlowFarneback(imageVector[0], imageVector[i + 1], flow, 0.5, 3, 15, 3, 5, 1.2, 0);
+        cv::calcOpticalFlowFarneback(frames[i], frames[i + 1], flow, 0.5, 3, 15, 3, 5, 1.2, 0);
 
-        //split the flow in x and y
-        cv::Mat flowParts[2];
-        cv::split(flow, flowParts);
+        //split flow into x and y components
+        cv::Mat flowAxes[2];
+        cv::split(flow, flowAxes);
 
-        //calculate the magnitude for each pixel and convert to polar coordinates, angle is empty but cartToPolar needs a placeholder
+        //convert cartesian coordinates to polar (magnitude and angle)
         cv::Mat magnitude;
         cv::Mat angle;
-        cv::cartToPolar(flowParts[0], flowParts[1], magnitude, angle);
-        
-        //accumulate the magnitude of the flow
-        totalMagnitude += magnitude;
+        cv::cartToPolar(flowAxes[0], flowAxes[1], magnitude, angle);
+
+        //accumulate weighted magnitude into the mask
+        nullMask += weight * magnitude;
+    }
+
+    //normalize nullMask to 0-255 range for thresholding and convert to 8-bit unsigned integer type
+    cv::Mat accNorm;
+    cv::normalize(nullMask, accNorm, 0, 255, cv::NORM_MINMAX, CV_8U);
     
-        /*
-        -------------------------------------------------------------------
-        PARTE VISIVA CHE SALTERA
-        -------------------------------------------------------------------
-        */
+    //compute otsu threshold then raise it by 30% to cut weak motion regions
+    cv::Mat binaryMask;
+    double otsuThresh = cv::threshold(accNorm, binaryMask, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+    cv::threshold(accNorm, binaryMask, otsuThresh, 255, cv::THRESH_BINARY);
 
-        //create an image to show the flow
-        cv::Mat flowImage;
-        cv::cvtColor(imageVector[i], flowImage, cv::COLOR_GRAY2BGR);
+    //find connected components in the binary mask
+    cv::Mat labels, stats, centroids;
+    int numComp = cv::connectedComponentsWithStats(binaryMask, labels, stats, centroids);
 
-        for(int y = 0; y < flow.rows; y += 10){
-            for(int x = 0; x < flow.cols; x += 10){
-                const cv::Point2f& fxy = flow.at<cv::Point2f>(y, x);
-                cv::line(flowImage, cv::Point(x, y), cv::Point(cvRound(x + fxy.x), cvRound(y + fxy.y)), cv::Scalar(0, 255, 0));
-                cv::circle(flowImage, cv::Point(x, y), 1, cv::Scalar(0, 255, 0), -1);
-            }
+    int bestLabel = -1;
+    int bestArea = 0;
+
+    //find the largest blob
+    for (int i = 1; i < numComp; i++) {
+        int area = stats.at<int>(i, cv::CC_STAT_AREA);
+        if (area > bestArea) {
+            bestArea = area;
+            bestLabel = i;
         }
-
-        //show the flow
-        cv::imshow("Dense Optical Flow", flowImage);
-        cv::waitKey(30);
-
-         /*
-        -------------------------------------------------------------------
-        PARTE VISIVA CHE SALTERA
-        -------------------------------------------------------------------
-        */
-
     }
 
-    //threshold the total magnitude to create a binary mask of the areas with significant motion
-    // normalizza in CV_8U per Otsu
-    cv::Mat magnitudeNorm;
-    cv::normalize(totalMagnitude, magnitudeNorm, 0, 255, cv::NORM_MINMAX, CV_8U);
+    //expand the largest blob by 1px to detect which other blobs touch it
+    cv::Mat largestBlob = (labels == bestLabel);
+    cv::Mat expandedBlob;
+    cv::Mat touchKernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
+    cv::dilate(largestBlob, expandedBlob, touchKernel);
 
-    // Otsu threshold automatico
-    cv::Mat mask;
-
-    //OCCHIO CHE QUA IL THRESHOLD E ALZATO A MANO DOPO L'OTSU  PER STRINGERE DI PIU IL RISULTATO, SE SI VUOLE PROVARE CON SOLO OTSU BASTA COMMENTARE LA RIGA DOPO E DECOMMENTARE QUELLA DELL'OTSU   
-    //cv::threshold(magnitudeNorm, mask, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-    double otsuThresh = cv::threshold(magnitudeNorm, mask, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-
-    // alza il threshold manualmente oltre Otsu
-    cv::threshold(magnitudeNorm, mask, otsuThresh * 1.5, 255, cv::THRESH_BINARY);
-
-    //scan the entire mask and collect the coordinates of all non-zero pixels
-    std::vector<cv::Point> points;
-    cv::findNonZero(mask, points);
-
-    //check if there is movement, if not return an empty rectangle
-    if(points.empty()){
-        std::cout << "Nessun movimento rilevato" << std::endl;
-        return cv::Rect(0, 0, 0, 0);
+    //include all blobs that touch the largest one, discard isolated ones
+    cv::Mat finalMask = cv::Mat::zeros(binaryMask.size(), CV_8U);
+    for (int i = 1; i < numComp; i++) {
+        cv::Mat blobMask = (labels == i);
+        cv::Mat overlap;
+        cv::bitwise_and(blobMask, expandedBlob, overlap);
+        if (cv::countNonZero(overlap) > 0)
+            finalMask |= blobMask;
     }
 
-    //compute the bounding box of the points
-    cv::Rect rect = cv::boundingRect(points);
-
-    return rect;
+    return finalMask;
 }

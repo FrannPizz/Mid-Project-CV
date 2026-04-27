@@ -3,11 +3,12 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/video/tracking.hpp>
 #include <iostream>
+#include <cmath>
+#include <algorithm>
 
 #ifndef SPARSEOPTICALFLOW_H_INCLUDED
 #define SPARSEOPTICALFLOW_H_INCLUDED
 
-std::vector<cv::Point2f> detectFeatures(std::vector<cv::Mat>& imageVector);
-cv::Rect sparseOpticalFlow(std::vector<cv::Mat>& imageVector); 
+cv::Rect sparseOpticalFlow(const std::vector<cv::Mat>& frames, const cv::Mat& mask);
 
 #endif

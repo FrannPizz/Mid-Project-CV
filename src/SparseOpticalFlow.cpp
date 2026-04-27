@@ -1,62 +1,48 @@
 #include "../include/SparseOpticalFlow.h"
-#include <algorithm>
-#include <cmath>
 
-std::vector<cv::Point2f> detectFeatures(std::vector<cv::Mat>& imageVector) {
+//implements sparse optical flow to track features across frames and draw bounding box
+cv::Rect sparseOpticalFlow(const std::vector<cv::Mat>& frames, const cv::Mat& mask) {
+    //detetects good features in frame 0 using shi tomasi
     std::vector<cv::Point2f> features;
-    cv::goodFeaturesToTrack(imageVector[0], features, 1000, 0.01, 10.0);
-    return features;
-}
+    cv::goodFeaturesToTrack(frames[0], features, 200, 0.05, 1.0, mask);
 
-cv::Rect sparseOpticalFlow(std::vector<cv::Mat>& imageVector) {
+    //save initial features for later comparison
+    std::vector<cv::Point2f> initialFeatures = features; 
 
-    std::vector<cv::Point2f> features = detectFeatures(imageVector);
-    std::vector<cv::Point2f> initialFeatures = features;
-    std::vector<cv::Point2f> nextFeatures;
-    std::vector<uchar> status;
-    std::vector<float> err;
+    //using lucas kanade method, track the detected features across all frames, updating their positions
+    for (size_t i = 0; i < frames.size() - 1; ++i) {
 
-    if (features.empty()) {
-        std::cout << "Nessuna feature trovata nel frame 0" << std::endl;
-        return cv::Rect();
-    }
+        std::vector<cv::Point2f> nextFeatures;
+        std::vector<uchar> status;
+        std::vector<float> err;
 
-    int N = features.size();
-    std::vector<float> totalmagnitude(N, 0.0f);
+        cv::calcOpticalFlowPyrLK(frames[i], frames[i + 1], features, nextFeatures, status, err);
 
-    for (int i = 0; i <imageVector.size(); i++) {
-
-        cv::calcOpticalFlowPyrLK(imageVector[i], imageVector[i + 1], features, nextFeatures, status, err);
-
-        for (int j = 0; j < N; j++) {
-            if (status[j] == 1) {
-                float dx = nextFeatures[j].x - features[j].x;
-                float dy = nextFeatures[j].y - features[j].y;
-                totalmagnitude[j] += std::sqrt(dx * dx + dy * dy);
-                features[j] = nextFeatures[j]; // aggiorna posizione solo se trovata
-            }
-            // se status[j] == 0: features[j] rimane invariata, magnitude non aggiornata
-        }
-        int lost = 0;
-        for (int j = 0; j < N; j++) if (!status[j]) lost++;
-        std::cout << "Frame " << i << " | perse: " << lost << " | tracciate: " << (N - lost) << std::endl;
-    }
-
-    // Top 5%
-    std::vector<float> sortedMags = totalmagnitude;
-    std::sort(sortedMags.begin(), sortedMags.end());
-    float threshold = sortedMags[static_cast<int>(N * 0.95)];
-    std::cout << "top 5% threshold: " << threshold << std::endl;
-
-    std::vector<cv::Point2f> movingFeatures;
-    for (int k = 0; k < N; k++) {
-        if (totalmagnitude[k] > threshold) {
-            movingFeatures.push_back(initialFeatures[k]);
-
+        for (size_t j = 0; j < nextFeatures.size(); ++j) {
+            if (status[j] == 1)
+                features[j] = nextFeatures[j];
         }
     }
-    std::cout << "Totale feature selezionate: " << movingFeatures.size() << std::endl;
 
-    if (movingFeatures.empty()) return cv::Rect();
-    return cv::boundingRect(movingFeatures);
+    //calculate total movememt for every feature  between frame 0 e final frame
+    std::vector<float> totalMovement;
+    for (size_t j = 0; j < features.size(); ++j) {
+        float dx = features[j].x - initialFeatures[j].x;
+        float dy = features[j].y - initialFeatures[j].y;
+        totalMovement.push_back(std::sqrt(dx * dx + dy * dy));
+    }
+
+    //sort total movement and select the 10% with the lowest as a threshold
+    std::vector<float> sorted = totalMovement;
+    std::sort(sorted.begin(), sorted.end());
+    float thresh = sorted[int(sorted.size() * 0.10)];
+
+    //keep the best 90% features and put into best features vector
+    std::vector<cv::Point2f> bestFeatures;
+    for (size_t j = 0; j < totalMovement.size(); ++j)
+        if (totalMovement[j] >= thresh)
+            bestFeatures.push_back(initialFeatures[j]);
+
+    cv::Rect boundingBox = cv::boundingRect(bestFeatures);
+    return boundingBox;
 }
