@@ -4,7 +4,7 @@
 cv::Rect sparseOpticalFlow(const std::vector<cv::Mat>& frames, const cv::Mat& mask) {
     //detetects good features in frame 0 using shi tomasi
     std::vector<cv::Point2f> features;
-    cv::goodFeaturesToTrack(frames[0], features, 200, 0.05, 1.0, mask);
+    cv::goodFeaturesToTrack(frames[0], features, 300, 0.05, 1.0, mask);
 
     //save initial features for later comparison
     std::vector<cv::Point2f> initialFeatures = features; 

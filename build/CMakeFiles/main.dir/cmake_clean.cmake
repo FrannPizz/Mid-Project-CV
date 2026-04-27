@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/main.dir/src/FrameStats.cpp.obj"
+  "CMakeFiles/main.dir/src/FrameStats.cpp.obj.d"
   "CMakeFiles/main.dir/src/OpticalFlowFilter.cpp.obj"
   "CMakeFiles/main.dir/src/OpticalFlowFilter.cpp.obj.d"
   "CMakeFiles/main.dir/src/SparseOpticalFlow.cpp.obj"

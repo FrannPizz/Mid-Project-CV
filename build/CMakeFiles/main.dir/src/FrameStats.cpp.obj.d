@@ -1,6 +1,6 @@
-CMakeFiles/main.dir/src/main.cpp.obj: \
- C:\Develop\Mid-Project-CV\src\main.cpp \
- C:/Develop/Mid-Project-CV/include/PreProc.h \
+CMakeFiles/main.dir/src/FrameStats.cpp.obj: \
+ C:\Develop\Mid-Project-CV\src\FrameStats.cpp \
+ C:/Develop/Mid-Project-CV/include/FrameStats.h \
  C:/msys64/ucrt64/include/opencv4/opencv2/highgui.hpp \
  C:/msys64/ucrt64/include/opencv4/opencv2/core.hpp \
  C:/msys64/ucrt64/include/opencv4/opencv2/core/cvdef.h \
@@ -256,25 +256,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: \
  C:/msys64/ucrt64/include/opencv4/opencv2/videoio.hpp \
  C:/msys64/ucrt64/include/opencv4/opencv2/imgproc.hpp \
  C:/msys64/ucrt64/include/opencv4/opencv2/imgproc/segmentation.hpp \
- C:/Develop/Mid-Project-CV/include/OpticalFlowFilter.h \
- C:/msys64/ucrt64/include/opencv4/opencv2/video/tracking.hpp \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn.hpp \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn/dnn.hpp \
- C:/msys64/ucrt64/include/opencv4/opencv2/core/async.hpp \
- C:/msys64/ucrt64/include/c++/15.2.0/chrono \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn/version.hpp \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn/dict.hpp \
- C:/msys64/ucrt64/include/c++/15.2.0/map \
- C:/msys64/ucrt64/include/c++/15.2.0/bits/stl_tree.h \
- C:/msys64/ucrt64/include/c++/15.2.0/bits/stl_map.h \
- C:/msys64/ucrt64/include/c++/15.2.0/bits/stl_multimap.h \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn/layer.hpp \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn/dnn.inl.hpp \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn/utils/inference_engine.hpp \
- C:/msys64/ucrt64/include/opencv4/opencv2/dnn/dnn.hpp \
  C:/msys64/ucrt64/include/c++/15.2.0/iostream \
- C:/Develop/Mid-Project-CV/include/SparseOpticalFlow.h \
- C:/Develop/Mid-Project-CV/include/FrameStats.h \
  C:/msys64/ucrt64/include/c++/15.2.0/fstream \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/codecvt.h \
  C:/msys64/ucrt64/include/c++/15.2.0/x86_64-w64-mingw32/bits/basic_file.h \

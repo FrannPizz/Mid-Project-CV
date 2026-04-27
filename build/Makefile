@@ -128,6 +128,30 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+src/FrameStats.obj: src/FrameStats.cpp.obj
+.PHONY : src/FrameStats.obj
+
+# target to build an object file
+src/FrameStats.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/src/FrameStats.cpp.obj
+.PHONY : src/FrameStats.cpp.obj
+
+src/FrameStats.i: src/FrameStats.cpp.i
+.PHONY : src/FrameStats.i
+
+# target to preprocess a source file
+src/FrameStats.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/src/FrameStats.cpp.i
+.PHONY : src/FrameStats.cpp.i
+
+src/FrameStats.s: src/FrameStats.cpp.s
+.PHONY : src/FrameStats.s
+
+# target to generate assembly for a file
+src/FrameStats.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/src/FrameStats.cpp.s
+.PHONY : src/FrameStats.cpp.s
+
 src/OpticalFlowFilter.obj: src/OpticalFlowFilter.cpp.obj
 .PHONY : src/OpticalFlowFilter.obj
 
@@ -233,6 +257,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... main
+	@echo ... src/FrameStats.obj
+	@echo ... src/FrameStats.i
+	@echo ... src/FrameStats.s
 	@echo ... src/OpticalFlowFilter.obj
 	@echo ... src/OpticalFlowFilter.i
 	@echo ... src/OpticalFlowFilter.s
