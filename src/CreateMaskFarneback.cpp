@@ -1,4 +1,4 @@
-#include "../include/OpticalFlowFilter.h"
+#include "../include/CreateMaskFarneback.h"
 
 //creates a mask by computing dense optical flow between consecutive frames using farneback algorithm for help sparse optical flow
 cv::Mat createMaskFarneback(std::vector<cv::Mat>& frames) {

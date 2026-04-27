@@ -11,9 +11,9 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 add_executable(main
     src/main.cpp
     src/preProc.cpp
-    src/OpticalFlowFilter.cpp
-    src/SparseOpticalFlow.cpp
+    src/CreateMaskFarneback.cpp
     src/FrameStats.cpp
+    src/LKOpticalFlow.cpp
 )
 
 target_link_libraries(main ${OpenCV_LIBS})

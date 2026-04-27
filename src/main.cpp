@@ -1,6 +1,8 @@
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include "../include/PreProc.h"
-#include "../include/OpticalFlowFilter.h"
-#include "../include/SparseOpticalFlow.h"
+#include "../include/CreateMaskFarneback.h"
+#include "../include/LKOpticalFlow.h"
 #include "../include/FrameStats.h"
 
 int main() {
@@ -51,12 +53,12 @@ int main() {
 
         //preprocess frames before computing optical flow
         preProcessFilter(frames);
-
+        
         //create a motion mask using Farneback optical flow
         cv::Mat maskFarneback = createMaskFarneback(frames);
 
         //compute the detected bounding box using sparse optical flow
-        cv::Rect boundingBox = sparseOpticalFlow(frames, maskFarneback);
+        cv::Rect boundingBox = LKOpticalFlow(frames, maskFarneback);
 
         //draw the ground-truth box in green and the detection box in red
         cv::rectangle(firstFrame, groundTruthBox, cv::Scalar(0, 255, 0), 2);

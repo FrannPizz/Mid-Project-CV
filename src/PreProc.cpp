@@ -17,5 +17,7 @@ void gaussianFilterVector(std::vector<cv::Mat>& imageVector)
 void preProcessFilter(std::vector<cv::Mat>& imageVector)
 {
     blackWhiteFilterVector(imageVector);
+    
+    //theoretically gaussian filter would be better, but in practice its worse for the detection results
     //gaussianFilterVector(imageVector);
 }

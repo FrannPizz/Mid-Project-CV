@@ -1,7 +1,7 @@
-#include "../include/SparseOpticalFlow.h"
+#include "../include/LKOpticalFlow.h"
 
 //implements sparse optical flow to track features across frames and draw bounding box
-cv::Rect sparseOpticalFlow(const std::vector<cv::Mat>& frames, const cv::Mat& mask) {
+cv::Rect LKOpticalFlow(const std::vector<cv::Mat>& frames, const cv::Mat& mask) {
     //detetects good features in frame 0 using shi tomasi
     std::vector<cv::Point2f> features;
     cv::goodFeaturesToTrack(frames[0], features, 300, 0.05, 1.0, mask);

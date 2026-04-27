@@ -49,6 +49,8 @@ void detectAccuracy(std::vector<float>& mIoU){
             std::cout << "Category " << i+1 << ": mIoU = " << mIoU[i] << " (False Positive)" << std::endl;
         }
     }
+
+    //print the results
     std::cout << "Total objects categories: " << mIoU.size() << std::endl;
     std::cout << "True Positives: " << truePositive << std::endl;
     std::cout << "False Positives: " << falsePositive << std::endl;
