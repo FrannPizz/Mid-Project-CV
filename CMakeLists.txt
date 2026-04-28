@@ -10,7 +10,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_executable(main
     src/main.cpp
-    src/preProc.cpp
+    src/PreProc.cpp
     src/CreateMaskFarneback.cpp
     src/FrameStats.cpp
     src/LKOpticalFlow.cpp
