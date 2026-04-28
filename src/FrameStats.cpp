@@ -1,4 +1,4 @@
-//Author: Francesco Pizzato
+//Author: Filippo Facco
 #include "../include/FrameStats.h"
 
 
@@ -46,10 +46,10 @@ void detectAccuracy(std::vector<float>& mIoU){
         sumIoU += mIoU[i];
         if (mIoU[i] > 0.5) {
             truePositive++;
-            std::cout << "Category " << i+1 << ": mIoU = " << mIoU[i] << " (True Positive)" << std::endl;
+            std::cout << "Category " << i+1 << ": IoU = " << mIoU[i] << " (True Positive)" << std::endl;
         } else {
             falsePositive++;
-            std::cout << "Category " << i+1 << ": mIoU = " << mIoU[i] << " (False Positive)" << std::endl;
+            std::cout << "Category " << i+1 << ": IoU = " << mIoU[i] << " (False Positive)" << std::endl;
         }
     }
 
@@ -64,11 +64,17 @@ void detectAccuracy(std::vector<float>& mIoU){
 
 }
 
-//saves detected bounding box coordinates to a text file in x1 y1 x2 y2 format
-void saveBoundingBox(const cv::Rect& boundingBox, const std::string& outputPath) {
-    std::ofstream file(outputPath);
+//saves detected bounding box coordinates to a text file and the first frame with detected bounding box
+void saveBoundingBox(cv::Rect& boundingBox, std::string& outputPath, cv::Mat& frame) {
+
+    //save the bounding box coordinates to a text file
+    std::ofstream file(outputPath + "detected.txt");
     file << boundingBox.x << " "
          << boundingBox.y << " "
          << (boundingBox.x + boundingBox.width) << " "
          << (boundingBox.y + boundingBox.height) << std::endl;
+
+    //also save the first frame with the detected bounding box drawn on it for visualization
+    cv::imwrite(outputPath + "detected.jpg", frame);
+
 }

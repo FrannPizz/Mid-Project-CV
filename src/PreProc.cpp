@@ -1,4 +1,4 @@
-//Author: Francesco Pizzato
+//Author: Filippo Facco
 #include "../include/PreProc.h"
 
 //function for black and white filter

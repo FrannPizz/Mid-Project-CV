@@ -1,4 +1,5 @@
-#include <opencv2/imgproc.hpp>
+﻿#include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include <iostream>
 #include <fstream>
 
@@ -8,7 +9,7 @@
 cv::Rect readGroundTruthBox(std::string& filePath);
 float detectmIoU(cv::Rect& boundingBox, cv::Rect& groundTruthBox);
 void detectAccuracy(std::vector<float>& mIoU);
-void saveBoundingBox(const cv::Rect& boundingBox, const std::string& outputPath);
+void saveBoundingBox(cv::Rect& boundingBox, std::string& outputPath, cv::Mat& frame);
 
 
 #endif

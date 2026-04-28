@@ -1,4 +1,23 @@
-//Author: Filippo Facco
+﻿/*
+ * ============================================================
+ * Project:     Mid-course Project
+ * Course:      Computer Vision
+ * Authors:     Filippo Facco, Francesco Pizzato
+ * Date:        28 April 2026
+ *
+ * Description:
+ *   This program detects moving objects in image sequences
+ *   using a two-stage optical flow pipeline.
+ *   First, Farneback dense optical flow generates a motion
+ *   mask to isolate regions of significant movement.
+ *   Then, Lucas-Kanade sparse optical flow tracks feature
+ *   points within the mask to compute a bounding box around
+ *   the detected object.
+ *   Results are evaluated against ground-truth annotations
+ *   using the Intersection over Union (IoU) metric.
+ * ============================================================
+ */
+
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include "../include/PreProc.h"
@@ -7,9 +26,6 @@
 #include "../include/FrameStats.h"
 
 int main() {
-
-    // Start processing and notify the user.
-    std::cout << "Avvio" << std::endl;
     
     //paths to image folders
     std::vector<std::string> pathFrames = {
@@ -31,11 +47,11 @@ int main() {
 
     //paths for saving detected bounding box coordinates
     std::vector<std::string> pathOutputs = {
-        "../output/bird/detected.txt",
-        "../output/car/detected.txt",
-        "../output/frog/detected.txt",
-        "../output/sheep/detected.txt",
-        "../output/squirrel/detected.txt"
+        "../output/bird/",
+        "../output/car/",
+        "../output/frog/",
+        "../output/sheep/",
+        "../output/squirrel/"
     };
 
     //collected IoU values for each processed sequence
@@ -75,7 +91,7 @@ int main() {
         cv::rectangle(firstFrame, boundingBox, cv::Scalar(0, 0, 255), 2);
 
         //save detected bounding box coordinates to output file
-        saveBoundingBox(boundingBox, pathOutputs[i]);
+        saveBoundingBox(boundingBox, pathOutputs[i], firstFrame);
 
         //compute and store the intersection-over-union metric (mIoU)
         mIoUValues.push_back(detectmIoU(boundingBox, groundTruthBox));

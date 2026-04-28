@@ -67,8 +67,9 @@ cv::Mat createMaskFarneback(std::vector<cv::Mat>& frames) {
         cv::Mat blobMask = (labels == i);
         cv::Mat overlap;
         cv::bitwise_and(blobMask, expandedBlob, overlap);
-        if (cv::countNonZero(overlap) > 0)
-            finalMask |= blobMask;
+        if (cv::countNonZero(overlap) > 0){
+            finalMask += blobMask;
+        }
     }
 
     return finalMask;
