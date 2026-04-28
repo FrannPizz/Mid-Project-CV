@@ -1,3 +1,4 @@
+//Author: Francesco Pizzato
 #include "../include/FrameStats.h"
 
 
@@ -38,9 +39,11 @@ void detectAccuracy(std::vector<float>& mIoU){
 
     int truePositive = 0;
     int falsePositive = 0; 
+    float sumIoU = 0.0f;
 
     //iterate through all mIoU values and count true positives and false positives
     for (int i = 0; i < mIoU.size(); i++) {
+        sumIoU += mIoU[i];
         if (mIoU[i] > 0.5) {
             truePositive++;
             std::cout << "Category " << i+1 << ": mIoU = " << mIoU[i] << " (True Positive)" << std::endl;
@@ -50,10 +53,22 @@ void detectAccuracy(std::vector<float>& mIoU){
         }
     }
 
+    float meanIoU = sumIoU / float(mIoU.size());
+
     //print the results
     std::cout << "Total objects categories: " << mIoU.size() << std::endl;
     std::cout << "True Positives: " << truePositive << std::endl;
     std::cout << "False Positives: " << falsePositive << std::endl;
+    std::cout << "mIoU (5 categories): " << meanIoU << std::endl;
     std::cout << "Accuracy: " << float(truePositive) / mIoU.size() * 100 << "%" << std::endl;
 
+}
+
+//saves detected bounding box coordinates to a text file in x1 y1 x2 y2 format
+void saveBoundingBox(const cv::Rect& boundingBox, const std::string& outputPath) {
+    std::ofstream file(outputPath);
+    file << boundingBox.x << " "
+         << boundingBox.y << " "
+         << (boundingBox.x + boundingBox.width) << " "
+         << (boundingBox.y + boundingBox.height) << std::endl;
 }

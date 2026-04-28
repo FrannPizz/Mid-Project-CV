@@ -1,0 +1,3 @@
+C:/Develop/Mid-Project-CV/build/CMakeFiles/main.dir
+C:/Develop/Mid-Project-CV/build/CMakeFiles/edit_cache.dir
+C:/Develop/Mid-Project-CV/build/CMakeFiles/rebuild_cache.dir

@@ -1,3 +1,4 @@
+//Author: Filippo Facco
 #include "../include/LKOpticalFlow.h"
 
 //implements sparse optical flow to track features across frames and draw bounding box

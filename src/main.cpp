@@ -1,3 +1,4 @@
+//Author: Filippo Facco
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include "../include/PreProc.h"
@@ -26,6 +27,15 @@ int main() {
         "../labels/frog/",
         "../labels/sheep/",
         "../labels/squirrel/"
+    };
+
+    //paths for saving detected bounding box coordinates
+    std::vector<std::string> pathOutputs = {
+        "../output/bird/detected.txt",
+        "../output/car/detected.txt",
+        "../output/frog/detected.txt",
+        "../output/sheep/detected.txt",
+        "../output/squirrel/detected.txt"
     };
 
     //collected IoU values for each processed sequence
@@ -63,6 +73,9 @@ int main() {
         //draw the ground-truth box in green and the detection box in red
         cv::rectangle(firstFrame, groundTruthBox, cv::Scalar(0, 255, 0), 2);
         cv::rectangle(firstFrame, boundingBox, cv::Scalar(0, 0, 255), 2);
+
+        //save detected bounding box coordinates to output file
+        saveBoundingBox(boundingBox, pathOutputs[i]);
 
         //compute and store the intersection-over-union metric (mIoU)
         mIoUValues.push_back(detectmIoU(boundingBox, groundTruthBox));
