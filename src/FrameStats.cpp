@@ -1,7 +1,6 @@
 //Author: Filippo Facco
 #include "../include/FrameStats.h"
 
-
 //reads ground truth box from text file and returns it as a cv::Rect object
 cv::Rect readGroundTruthBox(std::string& filename) {
     //open the text file and read the coordinates of the box
@@ -66,6 +65,9 @@ void detectAccuracy(std::vector<float>& mIoU){
 
 //saves detected bounding box coordinates to a text file and the first frame with detected bounding box
 void saveBoundingBox(cv::Rect& boundingBox, std::string& outputPath, cv::Mat& frame) {
+
+    //create output folder if it doesn't exist
+    std::filesystem::create_directories(outputPath);
 
     //save the bounding box coordinates to a text file
     std::ofstream file(outputPath + "detected.txt");
