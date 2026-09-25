@@ -1,0 +1,14 @@
+### Build ###
+build/
+*.o
+*.obj
+*.exe
+*.out
+
+### IDE ###
+.vscode/
+.idea/
+
+### OS ###
+.DS_Store
+Thumbs.db
